@@ -9,7 +9,14 @@ interface FlightCardProps {
 }
 
 export function FlightCard({ flight }: FlightCardProps) {
-  const { addBooking, removeBooking, toggleFavorite, isFavorite, isBooked } = useApp();
+  const { 
+    addBooking, 
+    removeBooking, 
+    toggleFavorite, 
+    isFavorite, 
+    isBooked,
+    convertPrice
+  } = useApp();
   const [showSeatSelector, setShowSeatSelector] = useState(false);
 
   // Handle seat selection completion
@@ -94,7 +101,7 @@ export function FlightCard({ flight }: FlightCardProps) {
             <div>
               <p className="text-sm text-muted-foreground">Price</p>
               <p className="text-xl font-bold text-primary">
-                {flight.price.toLocaleString('ru-RU')} ₽
+                {convertPrice(flight.price)}
               </p>
             </div>
 

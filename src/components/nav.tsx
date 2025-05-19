@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Plane, Heart, Calendar } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
+import { CurrencySelector } from './currency-selector';
 
 export function Nav() {
   const location = useLocation();
@@ -52,6 +53,10 @@ export function Nav() {
             <span>Favorites</span>
           </Link>
 
+          <div className="mx-2">
+            <CurrencySelector />
+          </div>
+          
           <ThemeToggle />
         </div>
       </div>

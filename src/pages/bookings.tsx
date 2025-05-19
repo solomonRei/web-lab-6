@@ -2,7 +2,7 @@ import { FlightCard } from '../components/flight-card';
 import { useApp } from '../context/AppContext';
 
 export function BookingsPage() {
-  const { bookings } = useApp();
+  const { bookings, convertPrice } = useApp();
   
   // Function to format date in a more readable format
   const formatDate = (dateString: string) => {
@@ -35,14 +35,14 @@ export function BookingsPage() {
                   <h3 className="font-semibold mb-2">Selected Seats</h3>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {booking.selectedSeats.map(seat => (
-                      <div key={seat.id} className="bg-green-100 border border-green-300 rounded px-2 py-1">
-                        {seat.id} ({seat.type})
+                      <div key={seat.id} className="bg-emerald-100 border border-emerald-300 rounded px-2 py-1">
+                        {seat.id} ({seat.type}) - {convertPrice(seat.price)}
                       </div>
                     ))}
                   </div>
                   {booking.totalPrice && (
                     <div className="text-right font-bold mt-2">
-                      Total: {booking.totalPrice.toLocaleString('ru-RU')} ₽
+                      Total: {convertPrice(booking.totalPrice)}
                     </div>
                   )}
                 </div>
