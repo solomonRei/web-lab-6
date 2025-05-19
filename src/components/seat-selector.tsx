@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from '../components/ui/use-toast';
 import type { Seat, SeatType, SeatStatus } from '../types/flight';
+import { useApp } from '../context/AppContext';
 
 const PRICE_MULTIPLIERS = {
   economy: 1,
@@ -16,15 +17,10 @@ interface SeatSelectorProps {
 }
 
 export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
+  const { currency, convertPrice } = useApp();
   const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [currency, setCurrency] = useState<'USD' | 'EUR' | 'RUB'>('USD');
-  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({
-    USD: 1,
-    EUR: 0.93,
-    RUB: 92.5,
-  });
 
   // Generate a realistic airplane seating layout
   useEffect(() => {
@@ -39,7 +35,7 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
             column: col,
             type: 'business',
             status: Math.random() > 0.7 ? 'occupied' : 'available' as SeatStatus,
-            price: basePrice * PRICE_MULTIPLIERS.business,
+            price: Math.round(basePrice * PRICE_MULTIPLIERS.business),
           });
         }
       }
@@ -55,7 +51,7 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
             column: col,
             type: 'comfort',
             status: Math.random() > 0.5 ? 'occupied' : 'available' as SeatStatus,
-            price: basePrice * PRICE_MULTIPLIERS.comfort,
+            price: Math.round(basePrice * PRICE_MULTIPLIERS.comfort),
           });
         }
       }
@@ -71,7 +67,7 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
             column: col,
             type: 'economy',
             status: Math.random() > 0.3 ? 'occupied' : 'available' as SeatStatus,
-            price: basePrice * PRICE_MULTIPLIERS.economy,
+            price: Math.round(basePrice * PRICE_MULTIPLIERS.economy),
           });
         }
       }
@@ -84,24 +80,6 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
     const price = selectedSeats.reduce((total, seat) => total + seat.price, 0);
     setTotalPrice(price);
   }, [selectedSeats]);
-
-  useEffect(() => {
-    const mockFetchRates = async () => {
-      try {
-        // Simulate API fetch delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setExchangeRates({
-          USD: 1,
-          EUR: 0.93,
-          RUB: 92.5,
-        });
-      } catch (error) {
-        console.error('Failed to fetch exchange rates:', error);
-      }
-    };
-
-    mockFetchRates();
-  }, []);
 
   const toggleSeat = (seatId: string) => {
     const newSeats = seats.map(seat => {
@@ -116,13 +94,6 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
     
     const updatedSelectedSeats = newSeats.filter(seat => seat.status === 'selected');
     setSelectedSeats(updatedSelectedSeats);
-  };
-
-  const convertPrice = (price: number): string => {
-    const converted = price * exchangeRates[currency];
-    const currencySymbol = currency === 'USD' ? '$' : currency === 'EUR' ? '€' : '₽';
-    
-    return `${currencySymbol}${converted.toFixed(2)}`;
   };
 
   const handleComplete = () => {
@@ -151,28 +122,20 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
     <div className="w-full max-w-4xl mx-auto bg-card p-6 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Select Your Seats</h2>
-        <div className="flex items-center space-x-2">
-          <span className="text-sm">Currency:</span>
-          <select 
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value as 'USD' | 'EUR' | 'RUB')}
-            className="p-1 border rounded bg-background text-foreground"
-          >
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
-            <option value="RUB">RUB (₽)</option>
-          </select>
+        <div className="text-sm text-muted-foreground">
+          Current currency: <span className="font-medium">{currency === 'USD' ? 'US Dollar' : currency === 'EUR' ? 'Euro' : 'Moldovan Leu'}</span>
+          <div className="text-xs">You can change the currency in the navigation bar</div>
         </div>
       </div>
       
       {/* Seat legend */}
       <div className="flex justify-center mb-6 space-x-6">
         <div className="flex items-center">
-          <div className="w-6 h-6 bg-blue-100 border border-blue-300 rounded mr-2"></div>
+          <div className="w-6 h-6 bg-sky-200 border border-sky-400 rounded mr-2"></div>
           <span>Available</span>
         </div>
         <div className="flex items-center">
-          <div className="w-6 h-6 bg-green-300 border border-green-500 rounded mr-2"></div>
+          <div className="w-6 h-6 bg-emerald-300 border border-emerald-500 rounded mr-2"></div>
           <span>Selected</span>
         </div>
         <div className="flex items-center">
@@ -210,8 +173,8 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
                             seat.status === 'occupied'
                               ? 'bg-gray-300 cursor-not-allowed'
                               : seat.status === 'selected'
-                              ? 'bg-green-300 border-2 border-green-500'
-                              : 'bg-blue-100 hover:bg-blue-200 border border-blue-300'
+                              ? 'bg-emerald-300 border-2 border-emerald-500'
+                              : 'bg-sky-200 hover:bg-sky-300 border border-sky-400'
                           }`}
                           onClick={() => toggleSeat(seat.id)}
                           disabled={seat.status === 'occupied'}
@@ -246,8 +209,8 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
                             seat.status === 'occupied'
                               ? 'bg-gray-300 cursor-not-allowed'
                               : seat.status === 'selected'
-                              ? 'bg-green-300 border-2 border-green-500'
-                              : 'bg-blue-100 hover:bg-blue-200 border border-blue-300'
+                              ? 'bg-emerald-300 border-2 border-emerald-500'
+                              : 'bg-sky-200 hover:bg-sky-300 border border-sky-400'
                           }`}
                           onClick={() => toggleSeat(seat.id)}
                           disabled={seat.status === 'occupied'}
@@ -282,8 +245,8 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
                             seat.status === 'occupied'
                               ? 'bg-gray-300 cursor-not-allowed'
                               : seat.status === 'selected'
-                              ? 'bg-green-300 border-2 border-green-500'
-                              : 'bg-blue-100 hover:bg-blue-200 border border-blue-300'
+                              ? 'bg-emerald-300 border-2 border-emerald-500'
+                              : 'bg-sky-200 hover:bg-sky-300 border border-sky-400'
                           }`}
                           onClick={() => toggleSeat(seat.id)}
                           disabled={seat.status === 'occupied'}
@@ -308,7 +271,7 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
               {selectedSeats.map(seat => (
-                <div key={seat.id} className="bg-green-100 border border-green-300 rounded px-2 py-1">
+                <div key={seat.id} className="bg-emerald-100 border border-emerald-300 rounded px-2 py-1">
                   {seat.id} ({seat.type}) - {convertPrice(seat.price)}
                 </div>
               ))}

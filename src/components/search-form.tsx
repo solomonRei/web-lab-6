@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { Calendar } from 'lucide-react';
 
 interface SearchFormProps {
   onSearch: (filters: {
@@ -14,6 +15,21 @@ export function SearchForm({ onSearch }: SearchFormProps) {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [date, setDate] = useState('');
+  const [minDate, setMinDate] = useState('');
+
+  // Set minimum date to today
+  useEffect(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    setMinDate(`${year}-${month}-${day}`);
+    
+    // Set default date to today
+    if (!date) {
+      setDate(`${year}-${month}-${day}`);
+    }
+  }, [date]);
 
   const cities = Array.from(
     new Set([
@@ -74,14 +90,18 @@ export function SearchForm({ onSearch }: SearchFormProps) {
           <label htmlFor="date" className="block text-sm font-medium text-muted-foreground">
             Date
           </label>
-          <input
-            type="date"
-            id="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
-            required
-          />
+          <div className="relative">
+            <input
+              type="date"
+              id="date"
+              value={date}
+              min={minDate}
+              onChange={(e) => setDate(e.target.value)}
+              className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 pl-10 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:dark:invert"
+              required
+            />
+            <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          </div>
         </div>
       </div>
 
