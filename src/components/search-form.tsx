@@ -24,12 +24,7 @@ export function SearchForm({ onSearch }: SearchFormProps) {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     setMinDate(`${year}-${month}-${day}`);
-    
-    // Set default date to today
-    if (!date) {
-      setDate(`${year}-${month}-${day}`);
-    }
-  }, [date]);
+  }, []);
 
   const cities = Array.from(
     new Set([
@@ -41,6 +36,13 @@ export function SearchForm({ onSearch }: SearchFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch({ from, to, date });
+  };
+
+  const handleClear = () => {
+    setFrom('');
+    setTo('');
+    setDate('');
+    onSearch({ from: '', to: '', date: '' });
   };
 
   return (
@@ -55,9 +57,8 @@ export function SearchForm({ onSearch }: SearchFormProps) {
             value={from}
             onChange={(e) => setFrom(e.target.value)}
             className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
-            required
           >
-            <option value="">Select city</option>
+            <option value="">Any city</option>
             {cities.map((city) => (
               <option key={city} value={city}>
                 {city}
@@ -75,9 +76,8 @@ export function SearchForm({ onSearch }: SearchFormProps) {
             value={to}
             onChange={(e) => setTo(e.target.value)}
             className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
-            required
           >
-            <option value="">Select city</option>
+            <option value="">Any city</option>
             {cities.map((city) => (
               <option key={city} value={city}>
                 {city}
@@ -98,19 +98,27 @@ export function SearchForm({ onSearch }: SearchFormProps) {
               min={minDate}
               onChange={(e) => setDate(e.target.value)}
               className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 pl-10 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:dark:invert"
-              required
             />
             <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           </div>
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="w-full rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:bg-primary/90"
-      >
-        Search Flights
-      </button>
+      <div className="flex space-x-4">
+        <button
+          type="submit"
+          className="flex-1 rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:bg-primary/90"
+        >
+          Search Flights
+        </button>
+        <button
+          type="button"
+          onClick={handleClear}
+          className="rounded-md bg-secondary px-4 py-2 font-medium text-secondary-foreground hover:bg-secondary/90"
+        >
+          Clear
+        </button>
+      </div>
     </form>
   );
 } 
