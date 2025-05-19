@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from '../components/ui/use-toast';
-import type { Seat, SeatType, SeatStatus } from '../types/flight';
+import type { Seat, SeatStatus } from '../types/flight';
 import { useApp } from '../context/AppContext';
 
 const PRICE_MULTIPLIERS = {

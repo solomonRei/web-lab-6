@@ -1,39 +1,35 @@
 # Flight Booker
 
-A modern web application for searching and booking flights, built with React, TypeScript, and Tailwind CSS.
+A modern client-side flight booking application built with React, TypeScript, and Vite.
+
 
 ## Features
 
-- Search flights by departure city, arrival city, and date
-- Book flights and manage bookings
-- Add flights to favorites
-- Dark/light theme support
-- Responsive design
-- Client-side state management with localStorage persistence
+- 🔍 **Flight Search** - Search flights by departure city, destination city, and date
+- ✈️ **Booking Management** - Book flights and manage your bookings
+- ❤️ **Favorites** - Save your favorite flights for quick booking later
+- 🌙 **Theme Support** - Choose between light, dark, and system theme
+- 💰 **Multiple Currencies** - View prices in USD, EUR, or MDL
+- 🧑‍✈️ **Seat Selection** - Choose your preferred seats with an interactive seat map
+- 📱 **Responsive Design** - Works on desktop, tablet, and mobile devices
+- 💾 **Local Storage** - All your data persists between sessions
 
 ## Tech Stack
 
-- React 18
-- TypeScript
-- Vite
-- React Router
-- Tailwind CSS
-- shadcn/ui components
-- Lucide icons
+- **React 19** - Latest version with improved performance
+- **TypeScript** - Type safety for better development experience
+- **Vite** - Fast, modern build tool
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Reusable UI components
+- **React Router** - Client-side routing
+- **Lucide React** - Beautiful SVG icons
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 16.x or later
-- npm 7.x or later
-
-### Installation
+## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/flight-booker.git
-   cd flight-booker
+   git clone https://github.com/yourusername/flights.git
+   cd flights
    ```
 
 2. Install dependencies:
@@ -46,45 +42,70 @@ A modern web application for searching and booking flights, built with React, Ty
    npm run dev
    ```
 
-4. Open [http://localhost:5173](http://localhost:5173) in your browser.
+4. Open your browser and navigate to:
+   ```
+   http://localhost:5173/flights/
+   ```
 
 ## Project Structure
 
 ```
-src/
-  ├── components/     # Reusable UI components
-  ├── context/       # React context for state management
-  ├── data/          # Mock data
-  ├── pages/         # Page components
-  ├── types/         # TypeScript type definitions
-  ├── App.tsx        # Main application component
-  └── main.tsx       # Application entry point
+flights/
+├── public/            # Static assets
+├── src/
+│   ├── components/    # Reusable UI components
+│   ├── context/       # React context for global state management
+│   ├── data/          # Mock flight data
+│   ├── lib/           # Utility functions
+│   ├── pages/         # Application pages
+│   ├── types/         # TypeScript type definitions
+│   ├── App.tsx        # Main application component
+│   └── main.tsx       # Application entry point
+├── .github/           # GitHub Actions workflows
+├── package.json       # Project dependencies and scripts
+└── vite.config.ts     # Vite configuration
 ```
 
-## Features in Detail
+## Development
 
-### Flight Search
-- Filter flights by departure and arrival cities
-- Select specific dates
-- View flight details including duration, stops, and price
+### Commands
 
-### Bookings
-- Book flights with a single click
-- View all booked flights
-- Cancel bookings
-- Persistent storage using localStorage
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run preview` - Preview the production build locally
+- `npm run deploy` - Deploy the application to GitHub Pages
 
-### Favorites
-- Add flights to favorites
-- Remove flights from favorites
-- View all favorite flights
-- Persistent storage using localStorage
+### State Management
 
-### Theme
-- Toggle between light and dark themes
-- System theme detection
-- Persistent theme preference
+The application uses React Context for state management. The main contexts are:
+
+- `AppContext` - Manages flights, bookings, favorites, and currency
+- `ThemeContext` - Manages light/dark theme
+
+All data is persisted in localStorage to maintain state between sessions.
+
+## Deployment
+
+The application is configured for deployment on GitHub Pages:
+
+1. Update the `base` path in `vite.config.ts` if needed
+2. Create a GitHub repository
+3. Run `npm run deploy` or push to the main branch to trigger GitHub Actions
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Flight data is simulated and for demonstration purposes only
+- Design inspired by modern booking platforms
+- Icons provided by [Lucide](https://lucide.dev/)

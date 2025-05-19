@@ -9,12 +9,10 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 export function HomePage() {
   const { flights } = useApp();
   const [filteredFlights, setFilteredFlights] = useState<Flight[]>(flights);
-  const [hasSearched, setHasSearched] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const flightsPerPage = 6;
 
   const handleSearch = (filters: { from: string; to: string; date: string }) => {
-    setHasSearched(true);
     setCurrentPage(1); // Reset to first page when new search is performed
     
     // If all fields are empty, show all flights

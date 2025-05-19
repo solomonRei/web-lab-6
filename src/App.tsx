@@ -7,8 +7,11 @@ import { BookingsPage } from './pages/bookings';
 import { FavoritesPage } from './pages/favorites';
 
 function App() {
+  // Determine the base URL to match the Vite config `base` option for GitHub Pages
+  const basename = import.meta.env.BASE_URL;
+
   return (
-    <Router>
+    <Router basename={basename}>
       <ThemeProvider defaultTheme="system" storageKey="flight-booker-theme">
         <AppProvider>
           <div className="min-h-screen bg-background">
