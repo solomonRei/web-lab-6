@@ -271,7 +271,7 @@ export function SeatSelector({ basePrice, onComplete }: SeatSelectorProps) {
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
               {selectedSeats.map(seat => (
-                <div key={seat.id} className="bg-emerald-100 border border-emerald-300 rounded px-2 py-1">
+                <div key={seat.id} className="bg-blue-600 border border-blue-700 rounded px-2 py-1 text-white">
                   {seat.id} ({seat.type}) - {convertPrice(seat.price)}
                 </div>
               ))}
